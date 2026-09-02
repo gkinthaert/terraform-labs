@@ -1,9 +1,9 @@
 variable "application_name" {
-    type = string
+  type = string
 }
 variable "environment_name" {
-    type = string
+  type = string
 }
 variable "primary_location" {
-    type = string
+  type = string
 }
