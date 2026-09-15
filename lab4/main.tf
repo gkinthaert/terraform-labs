@@ -38,22 +38,22 @@ resource "azurerm_role_assignment" "terraform_user" {
   principal_id         = data.azurerm_client_config.current.object_id # current user object id from azurerm_client_config data source
 }
 
-data "log_analytics_workspace" "observability" {
-  name                = "log-rg-observability-dev"
+data "azurerm_log_analytics_workspace" "observability" {
+  name                = "log-observability-dev"
   resource_group_name = "rg-observability-dev"
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
   name                       = "kv-${var.application_name}-${var.environment_name}-${random_string.keyvault_suffix.result}"
   target_resource_id         = azurerm_key_vault.main.id
-  log_analytics_workspace_id = data.log_analytics_workspace.observability.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.observability.id
 
   enabled_log {
-    category = "AuditEvent"
+    category_group = "audit"
   }
 
   enabled_log {
-    category = "AzurePolicyEvaluationDetails"
+    category_group = "allLogs"
   }
 
   enabled_metric {
