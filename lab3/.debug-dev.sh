@@ -1,3 +1,4 @@
+# this is a shell script that needs to be run in bash
 # set the subscription
 export ARM_SUBSCRIPTION_ID="4f126fa1-4ecb-4b04-86ef-e26043dd2c81"
 

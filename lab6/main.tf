@@ -40,7 +40,7 @@ resource "tls_private_key" "vm1" {
 }
 
 # create a local file to store the private key and public key
-/* no longer needed since we are storing the private key in the key vault, but leaving it here for reference
+/* no longer needed since we are storing the private key in the key vault, but leaving it here for reference 
 resource "local_file" "private_key" {
   content  = tls_private_key.vm1.private_key_pem
   filename = pathexpand("~/.ssh/vm1")
@@ -54,7 +54,7 @@ resource "local_file" "public_key" {
 
 # key vault to store the private key - data source to get the existing key vault, and then create a secret in that key vault to store the private key
 data "azurerm_key_vault" "main" {
-  name                = "kv-devops-dev"
+  name                = "kv-devops-dev-z00yzo"
   resource_group_name = "rg-devops-dev"
 }
 # this is the key vault that we created in lab5, and we are going to use it to store the private key for the vm1
@@ -71,7 +71,7 @@ resource "azurerm_key_vault_secret" "vm1_ssh_public" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm1" {
-  name                = "vm1${var.application_name}-${var.environment_name}"
+  name                = "vm1${var.application_name}${var.environment_name}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   size                = "Standard_D2ds_v7"

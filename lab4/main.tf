@@ -1,3 +1,4 @@
+# main resource group
 resource "azurerm_resource_group" "main" {
   name     = "rg-${var.application_name}-${var.environment_name}"
   location = var.primary_location
@@ -44,7 +45,7 @@ data "azurerm_log_analytics_workspace" "observability" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
-  name                       = "kv-${var.application_name}-${var.environment_name}-${random_string.keyvault_suffix.result}"
+  name                       = "diag-${var.application_name}-${var.environment_name}-${random_string.keyvault_suffix.result}"
   target_resource_id         = azurerm_key_vault.main.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.observability.id
 

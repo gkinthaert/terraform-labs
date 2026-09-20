@@ -12,7 +12,7 @@ export BACKEND_CONTAINER_NAME="tfstate"
 export BACKEND_KEY=$TF_VAR_application_name-$TF_VAR_environment_name 
 
 # run terraform
-terraform init  \
+terraform init -upgrade  \
     -backend-config="resource_group_name=${BACKEND_RESOURCE_GROUP}" \
     -backend-config="storage_account_name=${BACKEND_STORAGE_ACCOUNT}" \
     -backend-config="container_name=${BACKEND_CONTAINER_NAME}" \
