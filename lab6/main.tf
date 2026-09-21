@@ -79,6 +79,10 @@ resource "azurerm_linux_virtual_machine" "vm1" {
   network_interface_ids = [
     azurerm_network_interface.vm1.id,
   ]
+  # adding system assigned identity to the virtual machine so that it can access the key vault
+  identity {
+    type = "SystemAssigned"
+  }
 
   admin_ssh_key {
     username   = "adminuser"
@@ -96,4 +100,21 @@ resource "azurerm_linux_virtual_machine" "vm1" {
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
+}
+# virtual machine extension to run a custom script to get the hostname and uptime of the virtual machine, and output it to the console
+resource "azurerm_virtual_machine_extension" "entra_id_login" {
+  name                       = "${azurerm_linux_virtual_machine.vm1.name}-AADSSHLogin"
+  virtual_machine_id         = azurerm_linux_virtual_machine.vm1.id
+  publisher                  = "Microsoft.Azure.ActiveDirectory"
+  type                       = "AADSSHLoginForLinux"
+  type_handler_version       = "1.0"
+  auto_upgrade_minor_version = true
+}
+
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_role_assignment" "entra_id_user_login" {
+  scope                = azurerm_linux_virtual_machine.vm1.id
+  role_definition_name = "Virtual Machine User Login"
+  principal_id         = azuread_group.remote_access_users.object_id
 }
